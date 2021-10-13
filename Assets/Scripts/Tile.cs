@@ -2,27 +2,54 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 public class Tile : MonoBehaviour
 {
     public Color hoverColor;
     private Color _startColor;
+    public Color noMoney;
 
     public Vector3 turretOffset;
     private Renderer _rend;
 
-    private GameObject _turret;
+    public GameObject _turret;
     
-
+    BuildManager _buildManager;
     private void Start()
     {
         _rend = GetComponent<Renderer>();
         _startColor = _rend.material.color;
+        
+        _buildManager = BuildManager.Instance;
+    }
+
+    public Vector3 GetBuildPosition()
+    {
+        return transform.position + turretOffset;
     }
 
     private void OnMouseEnter()
     {
-        _rend.material.color = hoverColor;
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        if (!_buildManager.CanBuild)
+        {
+            return;
+        }
+
+        if (_buildManager.HasMoney)
+        {
+            _rend.material.color = hoverColor;
+        }
+        else
+        { 
+            _rend.material.color = noMoney;
+        }
+        
+        
     }
 
     private void OnMouseExit()
@@ -32,12 +59,21 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+        
+        if (!_buildManager.CanBuild)
+        {
+            return;
+        }
+        
         if (_turret != null)
         {
             return;
         }
 
-        GameObject turretToBuild = BuildManager.Instance.GetTurretToBuild();
-        _turret = Instantiate(turretToBuild, transform.position + turretOffset, transform.rotation);
+        _buildManager.BuildTurretOn(this);
     }
 }

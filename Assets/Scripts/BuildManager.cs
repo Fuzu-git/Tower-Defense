@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class BuildManager : MonoBehaviour
 {
     public GameObject standartTurretPrefab;
-    private GameObject turretToBuild;
-
+    private TurretsSerializable _turretToBuild;
+    public bool CanBuild { get { return _turretToBuild != null; } }
+    public bool HasMoney { get { return PlayerManager.Money >= _turretToBuild.turretCost; } }
     public static BuildManager Instance;
 
     private void Awake()
@@ -15,13 +17,20 @@ public class BuildManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    public void SelectTurretToBuild(TurretsSerializable turret)
     {
-        turretToBuild = standartTurretPrefab;
+        _turretToBuild = turret;
     }
 
-    public GameObject GetTurretToBuild()
+    public void BuildTurretOn(Tile tile)
     {
-        return turretToBuild;
+        if (PlayerManager.Money < _turretToBuild.turretCost)
+        {
+            return; 
+        }
+
+        PlayerManager.Money -= _turretToBuild.turretCost;
+        GameObject turret = Instantiate(_turretToBuild.prefab, tile.GetBuildPosition(), Quaternion.identity);
+        tile._turret = turret;
     }
 }
