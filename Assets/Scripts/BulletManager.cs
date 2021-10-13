@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class BulletManager : MonoBehaviour
 {
     private Transform _target;
-
+    
     public float speed = 30f;
+
+    public int damage = 5;
 
     public void Chase(Transform target)
     {
@@ -26,9 +29,8 @@ public class BulletManager : MonoBehaviour
         }
         
         transform.Translate(direction.normalized * frameDistance, Space.World);
-        
-        
-        
+        transform.LookAt(_target);
+
         if (_target == null)
         {
             Destroy(gameObject);
@@ -37,7 +39,18 @@ public class BulletManager : MonoBehaviour
 
         void HitTarget()
         {
+            Damage(_target);
             Destroy((gameObject));
+        }
+
+        void Damage(Transform Enemy)
+        {
+            Enemy e = Enemy.GetComponent<Enemy>();
+            
+            if (e != null)
+            { 
+                e.TakeDamage(damage);
+            }
         }
     }
 }

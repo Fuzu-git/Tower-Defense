@@ -8,7 +8,10 @@ public class Enemy : MonoBehaviour
     public float speed = 10f;
 
     private Transform _target;
+    
     private int _wavepoint = 0;
+    public int health = 10;
+    public int reward = 2;
     void Start()
     {
         _target = Waypoints.Pins[0];
@@ -28,10 +31,33 @@ public class Enemy : MonoBehaviour
         {
             if (_wavepoint >= Waypoints.Pins.Length - 1)
             {
-                Destroy(gameObject);
+                NexusPath();
             }
             _wavepoint++;
             _target = Waypoints.Pins[_wavepoint];
         }
+
+        void NexusPath()
+        {
+            PlayerManager.Lives--;
+            Destroy(gameObject);
+        }
+    }
+
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+        
+        if (health <= 0)
+        {
+            
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        PlayerManager.Money += reward;
+        Destroy(gameObject);
     }
 }

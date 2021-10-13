@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.UI;
 public class WaveSpawner : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class WaveSpawner : MonoBehaviour
             _countdown = timeWaves;
         }
         _countdown -= Time.deltaTime;
+        
+        _countdown = Mathf.Clamp(_countdown,0f, Mathf.Infinity);
+        
         waveCountdown.text = "Next Wave in " + Mathf.Round(_countdown).ToString() + " seconds";
     }
 
