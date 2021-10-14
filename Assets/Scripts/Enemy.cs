@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Sockets;
+
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -10,8 +8,8 @@ public class Enemy : MonoBehaviour
     private Transform _target;
     
     private int _wavepoint = 0;
-    public int health = 10;
-    public int reward = 2;
+    public static int Health = 10;
+    public static int reward = 2;
     void Start()
     {
         _target = Waypoints.Pins[0];
@@ -46,9 +44,9 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        health -= amount;
+        Health -= amount;
         
-        if (health <= 0)
+        if (Health <= 0)
         {
             
             Die();

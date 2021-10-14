@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayManager : MonoBehaviour
 {
-    private bool gameEnded = false;
+    private bool _gameEnded = false;
     void Update()
     {
-        if (gameEnded)
+        if (_gameEnded)
         {
             return;
         }
@@ -20,6 +18,12 @@ public class PlayManager : MonoBehaviour
 
     void EndGame()
     {
-        gameEnded = true;
+        _gameEnded = true;
+        QuitGame();
+    }
+    
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

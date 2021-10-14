@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
+
 using UnityEngine;
 
 public class BulletManager : MonoBehaviour
@@ -19,6 +17,11 @@ public class BulletManager : MonoBehaviour
     
     void Update()
     {
+        if (_target == null)
+        {
+            Destroy(gameObject);
+        }
+        
         Vector3 direction = _target.position - transform.position;
         float frameDistance = speed * Time.deltaTime;
 
@@ -31,11 +34,7 @@ public class BulletManager : MonoBehaviour
         transform.Translate(direction.normalized * frameDistance, Space.World);
         transform.LookAt(_target);
 
-        if (_target == null)
-        {
-            Destroy(gameObject);
-            return; 
-        }
+        
 
         void HitTarget()
         {
